@@ -1,0 +1,10 @@
+/dts-v1/;
+/plugin/;
+#include <dt-bindings/oplus/hw-id.h>
+#include "../volcano-audio-mtp.dts"
+#include "volcano-audio-overlay-common.dtsi"
+#include "piaget-24607-audio-volcano-overlay.dtsi"
+
+/ {
+    oplus,project-id = <24607 24697 24698 24623 24724>;
+};

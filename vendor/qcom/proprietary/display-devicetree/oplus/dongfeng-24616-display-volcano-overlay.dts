@@ -1,0 +1,24 @@
+/dts-v1/;
+/plugin/;
+#include <dt-bindings/oplus/hw-id.h>
+#include "../display/volcano-sde-display-mtp-overlay.dts"
+
+#include "volcano-display-overlay-common.dtsi"
+#include "dongfeng-24616-display-volcano-overlay.dtsi"
+
+/ {
+	model = "Qualcomm Technologies, Inc. Volcano MTP,dongfeng";
+
+	oplus,project-id = <24718  24719  24732  24616  24733  24738  24743  24744  24612  24621  24771  24772>;
+};
+
+/* #ifdef OPLUS_FEATURE_DISPLAY */
+&mdss_dsi_phy0 {
+	oplus,dsi-pll-ssc-disalbed;
+};
+
+/*&mdss_dsi_phy1 {
+	oplus,dsi-pll-ssc-disalbed;
+};*/
+
+/* OPLUS_FEATURE_DISPLAY */

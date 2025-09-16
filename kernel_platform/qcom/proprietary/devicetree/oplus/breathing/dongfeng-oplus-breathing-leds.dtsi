@@ -1,0 +1,51 @@
+&qupv3_se9_i2c {
+	status = "ok";
+
+	aw2023@45 {
+		compatible = "awinic,aw2023_led";
+		reg = <0x45>;
+
+		aw2023,red {
+			aw2023,name = "red";
+			aw2023,id = <0>;
+			aw2023,imax = <1>;
+			aw2023,led_default_trigger = "none";
+			aw2023,brightness = <0>;
+			aw2023,max-brightness = <15>;
+			aw2023,rise-time-ms = <6>;
+			aw2023,hold-time-ms = <0>;
+			aw2023,fall-time-ms = <6>;
+			aw2023,off-time-ms = <0>;
+		};
+
+		aw2023,green {
+			aw2023,name = "green";
+			aw2023,id = <1>;
+			aw2023,imax = <1>;
+			aw2023,led_default_trigger = "none";
+			aw2023,brightness = <0>;
+			aw2023,max-brightness = <15>;
+			aw2023,rise-time-ms = <6>;
+			aw2023,hold-time-ms = <0>;
+			aw2023,fall-time-ms = <6>;
+			aw2023,off-time-ms = <0>;
+		};
+
+		aw2023,blue {
+			aw2023,name = "blue";
+			aw2023,id = <2>;
+			aw2023,imax = <1>;
+			aw2023,led_default_trigger = "none";
+			aw2023,brightness = <0>;
+			aw2023,max-brightness = <15>;
+			aw2023,rise-time-ms = <6>;
+			aw2023,hold-time-ms = <0>;
+			aw2023,fall-time-ms = <6>;
+			aw2023,off-time-ms = <0>;
+		};
+	};
+};
+
+&pmxr2230_rgb {
+	status = "disabled";
+};

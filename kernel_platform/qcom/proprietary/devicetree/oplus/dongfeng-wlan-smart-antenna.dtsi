@@ -1,0 +1,42 @@
+
+&tlmm {
+	oplus_wsa_pins {
+                cnss_wlan_wsa_high: cnss_wlan_wsa_high {
+                        mux {
+                                pins = "gpio126";
+                                function = "gpio";
+                        };
+
+                        config {
+                                pins = "gpio126";
+                                drive-strength = <2>;
+                                output-low;
+                                bias-pull-down;
+                        };
+                };
+                cnss_wlan_wsa_low: cnss_wlan_wsa_low {
+                        mux {
+                                pins = "gpio126";
+                                function = "gpio";
+                        };
+
+                        config {
+                                pins = "gpio126";
+                                drive-strength = <2>;
+                                output-high;
+                                bias-pull-up;
+                        };
+                };
+        };
+};
+
+&soc {
+    oplus_wsa: oplus,wlan-wsa {
+		compatible = "oplus,wlan-wsa";
+		wlan-wsa-gpio = <&tlmm 126 0>;
+		pinctrl-names = "cnss_wlan_wsa_high", "cnss_wlan_wsa_low";
+		pinctrl-0 = <&cnss_wlan_wsa_high>;
+		pinctrl-1 = <&cnss_wlan_wsa_low>;
+		vdd-supply = <&L15B>;
+	};
+};

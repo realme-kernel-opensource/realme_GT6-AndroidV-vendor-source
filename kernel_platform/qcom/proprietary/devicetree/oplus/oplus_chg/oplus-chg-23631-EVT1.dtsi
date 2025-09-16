@@ -1,0 +1,114 @@
+//ifdef OPLUS_FEATURE_CHG_BASIC
+#include "oplus-chg-23631.dtsi"
+
+&tlmm {
+	dpdm_switch_vooc: dpdm_switch_vooc {
+		mux {
+			pins = "gpio84";
+			function = "gpio";
+		};
+		config {
+			pins = "gpio84";
+			bias-pull-up; /* NO pull */
+			drive-strength = <2>; /* 2 MA */
+			output-high;
+		};
+	};
+
+	dpdm_switch_ufcs: dpdm_switch_ufcs {
+		mux {
+			pins = "gpio84";
+			function = "gpio";
+		};
+		config {
+			pins = "gpio84";
+			bias-pull-down; /* NO pull */
+			drive-strength = <2>; /* 2 MA */
+			output-low;
+		};
+	};
+
+	dpdm_switch_ap: dpdm_switch_ap {
+		mux {
+			pins = "gpio84";
+			function = "gpio";
+		};
+		config {
+			pins = "gpio84";
+			bias-pull-down; /* NO pull */
+			drive-strength = <2>; /* 2 MA */
+			output-low;
+		};
+	};
+
+	switch_ctrl_vooc: switch_ctrl_vooc {
+		mux {
+			pins = "gpio66";
+			function = "gpio";
+		};
+		config {
+			pins = "gpio66";
+			bias-pull-up; /* NO pull */
+			drive-strength = <2>; /* 2 MA */
+			output-high;
+		};
+	};
+
+	switch_ctrl_ufcs: switch_ctrl_ufcs {
+		mux {
+			pins = "gpio66";
+			function = "gpio";
+		};
+		config {
+			pins = "gpio66";
+			bias-pull-down; /* NO pull */
+			drive-strength = <2>; /* 2 MA */
+			output-low;
+		};
+	};
+
+	switch_ctrl_ap: switch_ctrl_ap {
+		mux {
+			pins = "gpio66";
+			function = "gpio";
+		};
+		config {
+			pins = "gpio66";
+			bias-pull-down; /* NO pull */
+			drive-strength = <2>; /* 2 MA */
+			output-low;
+		};
+	};
+};
+
+&oplus_virtual_dpdm_switch {
+	/delete-property/ oplus,use_audio_switch;
+
+	oplus,dpdm_switch1-gpio = <&tlmm 84 0x00>;
+	oplus,switch_ctrl-gpio = <&tlmm 66 0x00>;
+	pinctrl-names = "switch_ctrl_ap", "switch_ctrl_vooc", "switch_ctrl_ufcs",
+			"dpdm_switch_ap", "dpdm_switch_vooc", "dpdm_switch_ufcs";
+	pinctrl-0 = <&switch_ctrl_ap>;
+	pinctrl-1 = <&switch_ctrl_vooc>;
+	pinctrl-2 = <&switch_ctrl_ufcs>;
+	pinctrl-3 = <&dpdm_switch_ap>;
+	pinctrl-4 = <&dpdm_switch_vooc>;
+	pinctrl-5 = <&dpdm_switch_ufcs>;
+};
+
+/delete-node/ &oplus_adsp_dpdm_switch;
+
+&oplus_ufcs_charge {
+	oplus,dpdm_switch_ic = <&oplus_virtual_dpdm_switch>;
+	silicon_1 {
+		oplus,dpdm_switch_ic = <&oplus_virtual_dpdm_switch>;
+	};
+};
+
+&oplus_pps_charge {
+	oplus,dpdm_switch_ic = <&oplus_virtual_dpdm_switch>;
+	silicon_1 {
+		oplus,dpdm_switch_ic = <&oplus_virtual_dpdm_switch>;
+	};
+};
+//#endif OPLUS_FEATURE_CHG_BASIC

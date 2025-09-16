@@ -1,0 +1,10 @@
+/dts-v1/;
+/plugin/;
+#include <dt-bindings/oplus/hw-id.h>
+#include "../volcano-audio-mtp.dts"
+#include "volcano-audio-overlay-common.dtsi"
+#include "dongfeng-24616-audio-volcano-overlay.dtsi"
+
+/ {
+    oplus,project-id = <24616 24718 24719 24732 24733 24738 24743 24744 24612 24621 24771 24772>;
+};

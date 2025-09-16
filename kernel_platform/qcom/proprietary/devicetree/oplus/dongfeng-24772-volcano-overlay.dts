@@ -1,0 +1,13 @@
+/dts-v1/;
+/plugin/;
+#include "dongfeng-24744-common.dtsi"
+#include "oplus_chg/oplus-chg-24772.dtsi"
+#include "nfc/dongfeng-nfc-thn31f.dtsi"
+#include "region-id.h.dtsi"
+
+/ {
+    model = "Qualcomm Technologies, Inc. volcano MTP,dongfeng";
+
+    oplus,project-id = <24772>;
+    oplus,region-id = <REGION_UNKNOWN REGION_CN REGION_IN REGION_APAC REGION_JP REGION_US>;
+};

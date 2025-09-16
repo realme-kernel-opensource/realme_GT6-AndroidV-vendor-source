@@ -1,0 +1,116 @@
+
+&tlmm {
+	aw_haptics: aw_haptics {
+		vib_irq_gpio_default: vib_irq_gpio_default {
+			mux {
+				pins = "gpio150";
+				function = "gpio";
+			};
+
+			config {
+				pins = "gpio150";
+				drive-strength = <2>;
+				input-enable;
+				bias-pull-up;
+			};
+		};
+	};
+
+	qupv3_se3_i2c_pins: qupv3_se3_i2c_pins {
+		qupv3_se3_i2c_sda_active: qupv3_se3_i2c_sda_active {
+			mux {
+				pins = "gpio15";
+				function = "qup0_se3_l0";
+			};
+
+			config {
+				pins = "gpio15";
+				drive-strength = <2>;
+				bias-pull-up;
+				qcom,i2c_pull;
+			};
+		};
+
+		qupv3_se3_i2c_scl_active: qupv3_se3_i2c_scl_active {
+			mux {
+				pins = "gpio16";
+				function = "qup0_se3_l1";
+			};
+
+			config {
+				pins = "gpio16";
+				drive-strength = <2>;
+				bias-pull-up;
+				qcom,i2c_pull;
+			};
+		};
+
+		qupv3_se3_i2c_sleep: qupv3_se3_i2c_sleep {
+			mux {
+				pins = "gpio15", "gpio16";
+				function = "gpio";
+			};
+
+			config {
+				pins = "gpio15", "gpio16";
+				drive-strength = <2>;
+				bias-disable;
+			};
+		};
+	};
+};
+
+&pmiv0104_eusb2_repeater {
+	qcom,param-override-seq = <0x0f 0x51 0x7 0x53 0x2 0x54 0x07 0x57>;
+	qcom,param-override-seq-host = <0x0e 0x51 0x7 0x53 0x3 0x54 0x07 0x57>;
+};
+
+&pmiv0104_vib {
+	status = "disabled";
+};
+
+&soc {
+	usb_nop_phy: usb_nop_phy {
+		compatible = "usb-nop-xceiv";
+	};
+};
+
+&usb0 {
+	dwc3@a600000 {
+		usb-phy = <&eusb2_phy0>, <&usb_nop_phy>;
+		maximum-speed = "high-speed";
+		dr_mode = "otg";
+		snps,usb2-lpm-disable;
+		snps,usb2-gadget-lpm-disable;
+	};
+};
+
+&usb_qmp_dp_phy {
+	pinctrl-names = "default";
+	pinctrl-0 = <&usb3phy_portselect_default>;
+	status = "disabled";
+};
+
+&qupv3_se3_i2c {
+	pinctrl-names = "default", "sleep";
+	pinctrl-0 = <&qupv3_se3_i2c_sda_active>, <&qupv3_se3_i2c_scl_active>;
+	pinctrl-1 = <&qupv3_se3_i2c_sleep>;
+	status = "ok";
+    // SIH6887 Haptic
+     sih_haptic_688x@6B {
+         compatible = "silicon,sih_haptic_688X";
+         reg = <0x6B>;
+         reset-gpio = <&tlmm 144 0x0>;
+         irq-gpio = <&tlmm 150 0x0>;
+         qcom,device_id = <809>;
+         lra_name = "0809";
+         pinctrl-names = "default";
+         pinctrl-0 = <&vib_irq_gpio_default>;
+         oplus,sih6887_boost_voltage = <81>; /* 8.1v */
+         haptic_vmax = /bits/ 8 < 60 60 60 60 60 60 60 60 62 66 70 74 79 83 86 90 91 >;
+         haptic_gain = /bits/ 8 < 0x40 0x49 0x51 0x5A 0x62 0x6B 0x73 0x7C 0x80 0x80 0x80 0x80 0x80 0x80 0x80 0x80 0x80 >;
+         status = "okay";
+         oplus,livetap_support;
+	};
+	/* AWINIC AW8697 Haptic End */
+};

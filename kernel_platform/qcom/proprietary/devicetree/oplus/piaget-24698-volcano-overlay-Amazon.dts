@@ -1,0 +1,72 @@
+/dts-v1/;
+/plugin/;
+#include "piaget_24698_common.dtsi"
+#include "nfc/piaget-nfc-sn220.dtsi"
+#include "region-id.h.dtsi"
+#include "oplus_chg/oplus-chg-24724.dtsi"
+
+/ {
+    model = "Qualcomm Technologies, Inc. volcano MTP,Piaget";
+
+    oplus,project-id = <24724>;
+    oplus,hw-id = <OPLUS_EVB1 OPLUS_T0 OPLUS_EVT1 OPLUS_DVT1 OPLUS_PVT1>;
+    oplus,region-id = <REGION_EU>;
+};
+
+&soc {
+  oplus-gpio {
+    compatible = "oplus,oplus-gpio";
+    pinctrl-names = "oplus_esim";
+    pinctrl-0 = <&esim_en_gpio &nfc_gpio0>;
+    oplus,oplus-esim-en = <&pm8550vs_c_gpios 5 0>;
+    oplus,oplus-nfc-gpio0 = <&tlmm 14 0>;
+  };
+};
+
+&pm8550vs_c_gpios {
+    esim_en_gpio: esim_en_gpio  {
+      pins = "gpio5";
+      function = "normal";
+      bias-disable; /* NO pull */
+      qcom,drive-strength = <2>; /* 2 MA */
+      power-source = <1>; /* 1.8V */
+      output-high;
+    };
+};
+
+&tlmm {
+  nfc_gpio0: nfc_gpio0  {
+      mux {
+          pins = "gpio14";
+          function = "gpio";
+      };
+      config {
+          pins = "gpio14";
+          bias-disable; /* NO pull */
+          drive-strength = <2>; /* 2 MA */
+          power-source = <1>; /* 1.8V */
+          output-low;
+      };
+    };
+};
+
+&soc {
+/* Add for low_mem_optimize */
+    low_mem_optimize {
+        compatible = "oplus,extra_free_kbytes";
+        extra_free_kbytes;
+    };
+    oplus_mm_config: oplus,mm_config {
+        compatible = "oplus,mm_osvelte-config";
+    ram-8g{
+        oplus_boost_pool {
+            feature-disable;
+        };
+    };
+    ram-12g {
+        oplus_boost_pool {
+            feature-disable;
+        };
+    };
+    };
+};

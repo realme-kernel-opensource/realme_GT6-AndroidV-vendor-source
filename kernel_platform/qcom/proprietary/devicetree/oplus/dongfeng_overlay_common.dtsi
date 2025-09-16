@@ -1,0 +1,157 @@
+#include <dt-bindings/regulator/qcom,rpmh-regulator-levels.h>
+#include "dongfeng-wlan-smart-antenna.dtsi"
+
+// Add the thermistors for shell-temp
+//#ifdef /* OPLUS_FEATURE_THERMAL_HORAE */
+&soc {
+	shell_front {
+		compatible = "oplus,shell-temp";
+	};
+
+	shell_frame {
+		compatible = "oplus,shell-temp";
+	};
+
+	shell_back {
+		compatible = "oplus,shell-temp";
+	};
+};
+//#endif /* OPLUS_FEATURE_THERMAL_HORAE */
+
+&soc {
+	oplus_mm_config: oplus,mm_config {
+		compatible = "oplus,mm_osvelte-config";
+		ram-6g {
+			oplus_boost_pool {
+				feature-disable;
+			};
+		};
+		ram-8g {
+			oplus_boost_pool {
+				feature-disable;
+			};
+		};
+		ram-12g {
+			oplus_boost_pool {
+				feature-disable;
+			};
+		};
+		ram-16g {
+			oplus_boost_pool {
+				feature-disable;
+			};
+		};
+	};
+};
+
+&pmk8550 {
+//#ifdef CONFIG_OPLUS_FEATURE_QCOM_PMICWD
+//pmicwd depend on pon_pbs@800
+    pon_pbs@800 {
+         compatible = "qcom,qpnp-power-on";
+         reg = <0x800>;
+         qcom,system-reset;
+         qcom,store-hard-reset-reason;
+    };
+
+    pon_pmicwd@800 {
+         compatible = "oplus,pmicwd_qpnp-power-on";
+         qcom,pmicwd;
+    };
+//#endif /* CONFIG_OPLUS_FEATURE_QCOM_PMICWD */
+
+    pon_hlos@1300 {
+        compatible = "qcom,pm8998-pon";
+        reg = <0x1300>, <0x800>;
+        reg-names = "pon_hlos", "pon_pbs";
+
+        pwrkey {
+            compatible = "qcom,pmk8350-pwrkey";
+            interrupts = <0x0 0x13 0x7 IRQ_TYPE_EDGE_BOTH>;
+            linux,code = <KEY_POWER>;
+        };
+
+        resin {
+            compatible = "qcom,pmk8350-resin";
+            interrupts = <0x0 0x13 0x6 IRQ_TYPE_EDGE_BOTH>;
+            linux,code = <KEY_VOLUMEUP>;
+        };
+
+        pwrkey-resin {
+            compatible = "qcom,pmk8350-pwrkey-resin";
+            interrupts = <0x0 0x13 0x2 IRQ_TYPE_EDGE_BOTH>;
+        };
+    };
+};
+
+// Bringup TFcard
+&sdhc_2 {
+	status = "ok";
+
+	cd-gpios = <&tlmm 65 GPIO_ACTIVE_HIGH>;
+        cd-debounce-delay-ms = <5>;
+};
+
+&apps_rsc_drv2 {
+    rpmh-regulator-ldob14 {
+        compatible = "qcom,rpmh-vrm-regulator";
+        qcom,resource-name = "ldob14";
+        qcom,regulator-type = "pmic5-ldo";
+        qcom,supported-modes =
+            <RPMH_REGULATOR_MODE_LPM
+            RPMH_REGULATOR_MODE_HPM>;
+        qcom,mode-threshold-currents = <0 10000>;
+
+		L14B:
+		pm7550_l14: regulator-pm7550-l14 {
+			regulator-name = "pm7550_l14";
+			qcom,set = <RPMH_REGULATOR_SET_ALL>;
+			regulator-min-microvolt = <3300000>;
+			regulator-max-microvolt = <3304000>;
+			qcom,init-voltage = <3300000>;
+			qcom,init-mode = <RPMH_REGULATOR_MODE_HPM>;
+		};
+    };
+};
+
+&soc {
+    bootloader_log {
+        compatible = "bootloader_log";
+        linux,contiguous-region = <&bootloader_log_mem>;
+    };
+    dump_device_info {
+        compatible = "dump_device_info";
+        linux,contiguous-region = <&dump_device_info_mem>;
+    };
+};
+
+&reserved_memory {
+    /*
+    This size is from Core/Uefi/LAA/memmap.dtsi
+    reg = <0x0 0x81CE4000 0x0 0x00010000>;
+    MemLabel = "UEFI_Log";
+    so we reserve this for bootloader log
+    */
+    bootloader_log_mem: botloader_mem@0x81CE4000 {
+        reg = <0 0x81CE4000 0 0x00010000>;
+        label = "bootloader_log_mem";
+    };
+
+    dump_device_info_mem: device_info_mem@0xA4F00000 {
+        reg = <0 0xA4F00000 0 0x00008000>;
+        label = "dump_device_info_mem";
+    };
+
+    ramoops_mem: ramoops_region@0xA1F00000 {
+        compatible = "ramoops";
+        alloc-ranges = <0x0 0x00000000 0xffffffff 0xffffffff>;
+        size = <0x0 0x240000>;
+        pmsg-size = <0x200000>;
+        console-size = <0x40000>;
+        mem-type = <2>;
+    };
+};
+
+&ufshc_mem {
+	irq_toggle_affinity_by_ioloading;
+};

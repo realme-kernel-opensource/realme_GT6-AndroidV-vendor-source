@@ -1,0 +1,40 @@
+#include <dt-bindings/oplus/hw-id.h>
+#include <dt-bindings/input/linux-event-codes.h>
+#include "../qcom/volcano-mtp-overlay.dts"
+#include "volcano_overlay_common.dtsi"
+#include "piaget_overlay_common.dtsi"
+#include "tp/piaget-oplus-tp-24607.dtsi"
+#include "sensor/piaget-sensor-24607.dtsi"
+#include "oplus_fp/oplus_fp_24607.dtsi"
+#include "oplus_misc/oplus-misc-24607_24697_24698.dtsi"
+
+&soc {
+  //#ifdef OPLUS_FEATURE_RF_CABLE_DETECT
+  oplus_rf_cable {
+      compatible = "oplus,rf_cable";
+      interrupt-parent = <&tlmm>;
+      rf_cable_support_num = <1>;
+      rf,cable0-gpio = <&tlmm 78 0>;
+      rf,cable-support-timer = <0>;
+      pinctrl-names = "rf_cable_active";
+      pinctrl-0 = <&rf_cable0_active>;
+  };
+  //#endif /* OPLUS_FEATURE_RF_CABLE_DETECT */
+};
+
+&tlmm {
+  //#ifdef OPLUS_FEATURE_RF_CABLE_DETECT
+  rf_cable0_active: rf_cable0_active {
+      mux {
+          pins = "gpio78";
+          function = "gpio";
+      };
+      config {
+          pins = "gpio78";
+          drive-strength = <2>;
+          input-enable;
+          bias-pull-up;
+      };
+  };
+  //#endif /* OPLUS_FEATURE_RF_CABLE_DETECT */
+};

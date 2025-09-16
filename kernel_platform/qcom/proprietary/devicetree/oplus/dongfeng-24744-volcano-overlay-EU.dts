@@ -1,0 +1,55 @@
+/dts-v1/;
+/plugin/;
+#include "dongfeng-24744-common.dtsi"
+#include "nfc/dongfeng-nfc-sn220.dtsi"
+#include "oplus_chg/oplus-chg-24744-EU.dtsi"
+#include "region-id.h.dtsi"
+#include "breathing/dongfeng-oplus-breathing-leds.dtsi"
+
+/ {
+    model = "Qualcomm Technologies, Inc. volcano MTP,dongfeng";
+
+    oplus,project-id = <24744>;
+    oplus,region-id = <REGION_EU>;
+};
+
+&soc {
+  oplus-gpio {
+    compatible = "oplus,oplus-gpio";
+    pinctrl-names = "oplus_esim";
+    pinctrl-0 = <&esim_en_gpio &nfc_gpio0>;
+    oplus,oplus-esim-en = <&tlmm 162 0>;
+    oplus,oplus-nfc-gpio0 = <&tlmm 14 0>;
+  };
+};
+
+
+
+&tlmm {
+  nfc_gpio0: nfc_gpio0  {
+      mux {
+          pins = "gpio14";
+          function = "gpio";
+      };
+      config {
+          pins = "gpio14";
+          bias-disable; /* NO pull */
+          drive-strength = <2>; /* 2 MA */
+          power-source = <1>; /* 1.8V */
+          output-low;
+      };
+    };
+  esim_en_gpio: esim_en_gpio  {
+      mux {
+          pins = "gpio162";
+          function = "gpio";
+      };
+      config {
+          pins = "gpio162";
+          bias-disable;
+          drive-strength = <2>;
+          power-source = <1>; /* 1.8V */
+          output-high;
+      };
+  };
+};
